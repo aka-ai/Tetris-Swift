@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SwiftrisDelegate {
     
     //  Swift typically enforces instantiation either in-line where you declare the variable or during the initializer, init…. To avoid this rule, we've added an ! after the type.
     var scene: GameScene!
@@ -30,30 +30,69 @@ class GameViewController: UIViewController {
         scene.tick = didTick
         
         swiftris = Swiftris()
+        swiftris.delegate = self
         swiftris.beginGame()
         
         // Present the scene.
         skView.presentScene(scene)
         
-        // #we add nextShape to the game layer at the preview location. When that animation completes, we reposition the underlying Shape object at the starting row and starting column before we ask GameScene to move it from the preview location to its starting position. Once that completes, we ask Swiftris for a new shape, begin ticking, and add the newly established upcoming piece to the preview area.
-        scene.addPreviewShapeToScene(shape: swiftris.nextShape!) {
-            self.swiftris.nextShape?.moveTo(column: StartingColumn, row: StartingRow)
-            self.scene.movePreviewShape(shape: self.swiftris.nextShape!) {
-                let nextShapes = self.swiftris.newShape()
-                self.scene.startTicking()
-                self.scene.addPreviewShapeToScene(shape: nextShapes.nextShape!) {}
-            }
-        }
     }
     
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    //#15
     func didTick() {
-        swiftris.fallingShape?.lowerShapeByOneRow()
-        scene.redrawShape(shape: swiftris.fallingShape!, completion: {})
+        swiftris.letShapeFall()
+    }
+    
+    func nextShape() {
+        let newShapes = swiftris.newShape()
+        guard let fallingShape = newShapes.fallingShape else {
+            return
+        }
+        self.scene.addPreviewShapeToScene(shape: newShapes.nextShape!) {}
+        self.scene.movePreviewShape(shape: fallingShape) {
+
+        //  we introduced a boolean which allows us to shut down interaction with the view. Regardless of what the user does to the device at this point, they will not be able to manipulate Switris in any way. This is useful during intermediate states when we animate or shift blocks, and perform calculations. Otherwise, a well-timed user interaction may cause an unpredictable game state to occur.
+            self.view.isUserInteractionEnabled = true
+            self.scene.startTicking()
+        }
+    }
+    
+    func gameDidBegin(swiftris: Swiftris) {
+        // The following is false when restarting a new game
+        if swiftris.nextShape != nil &&
+            swiftris.nextShape!.blocks[0].sprite == nil {
+            scene.addPreviewShapeToScene(shape: swiftris.nextShape!) {
+                self.nextShape()
+            }
+        } else {
+            nextShape()
+        }
+    }
+    
+    func gameDidEnd(swiftris: Swiftris) {
+        view.isUserInteractionEnabled = false
+        scene.stopTicking()
+    }
+    
+    func gameDidLevelUp(swiftris: Swiftris) {
+        
+    }
+    
+    func gameShapeDidDrop(swiftris: Swiftris) {
+        
+    }
+    
+    func gameShapeDidLand(swiftris: Swiftris) {
+        scene.stopTicking()
+        nextShape()
+    }
+    
+//  all that is necessary to do after a shape has moved is to redraw its representative sprites at their new locations.
+    func gameShapeDidMove(swiftris: Swiftris) {
+        scene.redrawShape(shape: swiftris.fallingShape!) {}
     }
 }
 
