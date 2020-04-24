@@ -16,6 +16,9 @@ let StartingRow = 0
 let PreviewColumn = 12
 let PreviewRow = 1
 
+let PointsPerLine = 10
+let LevelThreshold = 500
+
 protocol SwiftrisDelegate {
     //Invoked when the current round of Swiftris ends
     func gameDidEnd(swiftris: Swiftris)
@@ -44,6 +47,8 @@ class Swiftris {
     // #Swiftris notifies the delegate of events throughout the course of the game. In our case, GameViewController will attach itself as the delegate to update the user interface and react to game state changes whenever something occurs inside of the Swiftris class. Swiftris will work on a trial-and-error basis. The user interface, GameViewController, will ask Swiftris to move its falling shape either down, left, or right. Swiftris will accept this request, move the shape and then detect whether its new position is legal. If so, the shape will remain, otherwise it will revert to its original location.
     var delegate: SwiftrisDelegate?
     
+    var score = 0
+    var level = 1
     
     init() {
         fallingShape = nil
@@ -177,8 +182,86 @@ class Swiftris {
     }
     
     func endGame() {
+        score = 0
+        level = 1
         delegate?.gameDidEnd(swiftris: self)
     }
+    
+    //  we defined a function which returns yet another tuple. This time it's composed of two arrays: linesRemoved and fallenBlocks. linesRemoved maintains each row of blocks which the user has filled in.
+         func removeCompletedLines() -> (linesRemoved: Array<Array<Block>>, fallenBlocks: Array<Array<Block>>) {
+             var removedLines = Array<Array<Block>>()
+             for row in (1..<NumRows).reversed() {
+                 var rowOfBlocks = Array<Block>()
+    
+                //  we use a for loop which iterates from 0 all the way up to, but not including NumColumns, 0 to 9. This for loop adds every block in a given row to a local array variable named rowOfBlocks. If it ends up with a full set, 10 blocks in total, it counts that as a removed line and adds it to the return variable.
+                 for column in 0..<NumColumns {
+                     guard let block = blockArray[column, row] else {
+                         continue
+                     }
+                     rowOfBlocks.append(block)
+                 }
+                 if rowOfBlocks.count == NumColumns {
+                     removedLines.append(rowOfBlocks)
+                     for block in rowOfBlocks {
+                         blockArray[block.column, block.row] = nil
+                     }
+                 }
+             }
+
+        //   we check and see if we recovered any lines at all, if not, we return empty arrays.
+             if removedLines.count == 0 {
+                 return ([], [])
+             }
+        //  we add points to the player's score based on the number of lines they've created and their level. If their points exceed their level times 1000, they level up and we inform the delegate.
+             let pointsEarned = removedLines.count * PointsPerLine * level
+             score += pointsEarned
+             if score >= level * LevelThreshold {
+                 level += 1
+                delegate?.gameDidLevelUp(swiftris: self)
+             }
+
+             var fallenBlocks = Array<Array<Block>>()
+             for column in 0..<NumColumns {
+                 var fallenBlocksArray = Array<Block>()
+                
+                //  we count upwards towards the top of the game board. As we do so, we take each remaining block we find on the game board and lower it as far as possible. fallenBlocks is an array of arrays, we've filled each sub-array with blocks that fell to a new position as a result of the user clearing lines beneath them.
+                 for row in (1..<removedLines[0][0].row).reversed() {
+                     guard let block = blockArray[column, row] else {
+                         continue
+                     }
+                     var newRow = row
+                     while (newRow < NumRows - 1 && blockArray[column, newRow + 1] == nil) {
+                         newRow += 1
+                     }
+                     block.row = newRow
+                     blockArray[column, row] = nil
+                     blockArray[column, newRow] = block
+                     fallenBlocksArray.append(block)
+                 }
+                 if fallenBlocksArray.count > 0 {
+                     fallenBlocks.append(fallenBlocksArray)
+                 }
+             }
+             return (removedLines, fallenBlocks)
+         }
+    
+//  This function loops through and creates rows of blocks in order for the game scene to animate them off the game board. Meanwhile, it nullifies each location in the block array to empty it entirely, preparing it for a new game.
+    func removeAllBlocks() -> Array<Array<Block>> {
+        var allBlocks = Array<Array<Block>>()
+        for row in 0..<NumRows {
+            var rowOfBlocks = Array<Block>()
+            for column in 0..<NumColumns {
+                guard let block = blockArray[column, row] else {
+                    continue
+                }
+                rowOfBlocks.append(block)
+                blockArray[column, row] = nil
+            }
+            allBlocks.append(rowOfBlocks)
+        }
+        return allBlocks
+    }
+    
     
     //  Dropping a shape is the act of sending it plummeting towards the bottom of the game board. The user will elect to do this when their patience for the slow-moving Tetromino wears thin. dropShape() provides a convenient function to achieve this. It will continue dropping the shape by a single row until it detects an illegal placement state, at which point it will raise it and then notify the delegate that a drop has occurred.
 
