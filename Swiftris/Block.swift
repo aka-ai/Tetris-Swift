@@ -48,12 +48,12 @@ enum BlockColor: Int, CustomStringConvertible {
 
 //we declare Block as a class which implements both the CustomStringConvertible and Hashable protocols. Hashable allows us to store Block in Array2D.
 class Block: Hashable, CustomStringConvertible {
-
+    
     let color: BlockColor
     
     var column: Int
     var row: Int
-     // The SKSpriteNode will represent the visual element of the Block which GameScene will use to render and animate each Block.
+    // The SKSpriteNode will represent the visual element of the Block which GameScene will use to render and animate each Block.
     var sprite: SKSpriteNode?
     var spriteName: String {
         return color.spriteName
@@ -61,8 +61,8 @@ class Block: Hashable, CustomStringConvertible {
     
     //we implemented the hashValue calculated property, which Hashable requires us to provide. We return the exclusive-or of our row and column properties to generate a unique integer for each Block.
     //** original is  var hashValue: Int {
-//            return self.column ^ self.row
-//        }
+    //            return self.column ^ self.row
+    //        }
     func hash(into hasher: inout Hasher) {
         _ = self.column ^ self.row
     }

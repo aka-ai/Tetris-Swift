@@ -33,24 +33,24 @@ class GameScene: SKScene {
     }
     
     //  OpenGL powers SpriteKit so its coordinate system is opposite to iOS' native Cocoa coordinates. (0, 0) in SpriteKit is the bottom-left corner. We will draw Swiftris from the top down so we anchor our game in the top-left corner of the screen: (0, 1.0). We then create an SKSpriteNode capable of representing our background image and we add it to the scene.
-     override init(size: CGSize) {
-         super.init(size: size)
-         
-         anchorPoint = CGPoint(x: 0, y: 1.0)
-         
-         //  background is the variable's name, Swift infers its type to be that of SKSpriteNode and the keyword let indicates that it can not be re-assigned.
-         let background = SKSpriteNode(imageNamed: "background")
-         background.position = CGPoint(x: 0, y: 0)
-         background.anchorPoint = CGPoint(x:0, y: 1.0)
-         addChild(background)
+    override init(size: CGSize) {
+        super.init(size: size)
+        
+        anchorPoint = CGPoint(x: 0, y: 1.0)
+        
+        //  background is the variable's name, Swift infers its type to be that of SKSpriteNode and the keyword let indicates that it can not be re-assigned.
+        let background = SKSpriteNode(imageNamed: "background")
+        background.position = CGPoint(x: 0, y: 0)
+        background.anchorPoint = CGPoint(x:0, y: 1.0)
+        addChild(background)
         
         addChild(gameLayer)
-
+        
         let gameBoardTexture = SKTexture(imageNamed: "gameboard")
         let gameBoard = SKSpriteNode(texture: gameBoardTexture, size: CGSize(width: BlockSize * CGFloat(NumColumns), height: BlockSize * CGFloat(NumRows)))
         gameBoard.anchorPoint = CGPoint(x:0, y:1.0)
         gameBoard.position = LayerPosition
-
+        
         shapeLayer.position = LayerPosition
         shapeLayer.addChild(gameBoard)
         gameLayer.addChild(shapeLayer)
@@ -72,7 +72,7 @@ class GameScene: SKScene {
             tick?()
         }
     }
-
+    
     //we provide accessor methods to let external classes stop and start the ticking process, something we'll make use of later to keep pieces from falling at key moments.
     func startTicking() {
         lastTick = NSDate()
@@ -91,21 +91,21 @@ class GameScene: SKScene {
     
     func addPreviewShapeToScene(shape: Shape, completion:@escaping () -> ()) {
         for block in shape.blocks {
-        // #we've created a method which will add a shape for the first time to the scene as a preview shape. We use a dictionary to store copies of re-usable SKTexture objects since each shape will require more than one copy of the same image.
+            // #we've created a method which will add a shape for the first time to the scene as a preview shape. We use a dictionary to store copies of re-usable SKTexture objects since each shape will require more than one copy of the same image.
             var texture = textureCache[block.spriteName]
             if texture == nil {
                 texture = SKTexture(imageNamed: block.spriteName)
                 textureCache[block.spriteName] = texture
             }
             let sprite = SKSpriteNode(texture: texture)
-    // #we use our convenient pointForColumn∫ method to place each block's sprite in the proper location. We start it at row - 2, such that the preview piece animates smoothly into place from a higher location.
+            // #we use our convenient pointForColumn∫ method to place each block's sprite in the proper location. We start it at row - 2, such that the preview piece animates smoothly into place from a higher location.
             sprite.position = pointForColumn(column: block.column, row: block.row - 2)
             shapeLayer.addChild(sprite)
             block.sprite = sprite
             
             //Animation
             sprite.alpha = 0
-    // #we introduce SKAction objects which are responsible for visually manipulating SKNode objects. Each block will fade and move into place as it appears as part of the next piece. It will move two rows down and fade from complete transparency to 70% opacity.
+            // #we introduce SKAction objects which are responsible for visually manipulating SKNode objects. Each block will fade and move into place as it appears as part of the next piece. It will move two rows down and fade from complete transparency to 70% opacity.
             let moveAction = SKAction.move(to: pointForColumn(column: block.column, row: block.row), duration: TimeInterval(0.2))
             moveAction.timingMode = .easeOut
             let fadeInAction = SKAction.fadeAlpha(to: 0.7, duration: 0.4)
