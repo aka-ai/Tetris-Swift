@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController, SwiftrisDelegate {
+class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognizerDelegate {
     
     //  Swift typically enforces instantiation either in-line where you declare the variable or during the initializer, init…. To avoid this rule, we've added an ! after the type.
     var scene: GameScene!
@@ -90,7 +90,11 @@ class GameViewController: UIViewController, SwiftrisDelegate {
         nextShape()
     }
     
-//  all that is necessary to do after a shape has moved is to redraw its representative sprites at their new locations.
+    //gestureRecognizer will invoke this function when it recognizes a tap.
+    @IBAction func didTap(_ sender: UITapGestureRecognizer) {
+        swiftris.rotateShape()
+    }
+    //  all that is necessary to do after a shape has moved is to redraw its representative sprites at their new locations.
     func gameShapeDidMove(swiftris: Swiftris) {
         scene.redrawShape(shape: swiftris.fallingShape!) {}
     }
