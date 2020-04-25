@@ -19,6 +19,7 @@
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="uq4-wW-K0t" appends="YES" id="lyi-tT-Wud"/>
+                            <outletCollection property="gestureRecognizers" destination="epf-Gk-rVx" appends="YES" id="6IC-zQ-7dQ"/>
                         </connections>
                     </view>
                 </viewController>
@@ -29,6 +30,12 @@
                         <outlet property="delegate" destination="BV1-FR-VrT" id="oV6-vl-NEB"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="epf-Gk-rVx">
+                    <connections>
+                        <action selector="didPan:" destination="BV1-FR-VrT" id="D3M-zd-bSp"/>
+                        <outlet property="delegate" destination="BV1-FR-VrT" id="Uvt-6k-lxF"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="139" y="138"/>
         </scene>
