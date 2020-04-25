@@ -87,6 +87,11 @@ class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognize
     
     func gameShapeDidDrop(swiftris: Swiftris) {
         
+    //  we stop the ticks, redraw the shape at its new location and then let it drop. This will in turn call back to GameViewController and report that the shape has landed.
+        scene.stopTicking()
+        scene.redrawShape(shape: swiftris.fallingShape!) {
+            swiftris.letShapeFall()
+        }
     }
     
     func gameShapeDidLand(swiftris: Swiftris) {
@@ -121,6 +126,34 @@ class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognize
         } else if sender.state == .began {
             panPointReference = currentPoint
         }
+    }
+    
+    
+    @IBAction func didSwipe(_ sender: UISwipeGestureRecognizer) {
+        swiftris.dropShape()
+    }
+    
+//  GameViewController will implement an optional delegate method found in UIGestureRecognizerDelegate which will allow each gesture recognizer to work in tandem with the others. At times, a gesture recognizer may collide with another.
+
+//  Sometimes when swiping down, a pan gesture may occur simultaneously with a swipe gesture. In order for these recognizers to relinquish priority, we will implement another optional delegate method gestureRecognizer().
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+//  The code performs is conditionals. These conditionals check whether the generic UIGestureRecognizer parameters is of the specific types of recognizers we expect to see. If the check succeeds, we execute the code block.
+
+//  Our code lets the pan gesture recognizer take precedence over the swipe gesture and the tap to do likewise over the pan. This will keep all three of our recognizers from bickering with one another over who's the prettiest API in the room.
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UISwipeGestureRecognizer {
+            if otherGestureRecognizer is UIPanGestureRecognizer {
+                return true
+            }
+        } else if gestureRecognizer is UIPanGestureRecognizer {
+            if otherGestureRecognizer is UITapGestureRecognizer {
+                return true
+            }
+        }
+        return false
     }
     
     //  all that is necessary to do after a shape has moved is to redraw its representative sprites at their new locations.
