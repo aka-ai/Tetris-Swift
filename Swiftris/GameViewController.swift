@@ -15,7 +15,9 @@ class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognize
     var scene: GameScene!
     var swiftris: Swiftris!
     
-//  keep track of the last point on the screen at which a shape movement occurred or where a pan begins
+    @IBOutlet weak var scoreLabel: UILabel!
+    
+    //  keep track of the last point on the screen at which a shape movement occurred or where a pan begins
     var panPointReference: CGPoint?
     
     override func viewDidLoad() {
