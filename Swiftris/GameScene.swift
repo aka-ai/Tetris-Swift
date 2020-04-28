@@ -117,7 +117,8 @@ class GameScene: SKScene {
             //Animation
             sprite.alpha = 0
             // #we introduce SKAction objects which are responsible for visually manipulating SKNode objects. Each block will fade and move into place as it appears as part of the next piece. It will move two rows down and fade from complete transparency to 70% opacity.
-            let moveAction = SKAction.move(to: pointForColumn(column: block.column - 3, row: block.row), duration: TimeInterval(0.2))
+            //Ai change position of preview shape here
+            let moveAction = SKAction.move(to: pointForColumn(column: block.column - 4, row: block.row - 5), duration: TimeInterval(0.2))
             moveAction.timingMode = .easeOut
             let fadeInAction = SKAction.fadeAlpha(to: 0.7, duration: 0.4)
             fadeInAction.timingMode = .easeOut
