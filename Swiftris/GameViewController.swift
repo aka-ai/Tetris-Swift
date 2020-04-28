@@ -16,7 +16,7 @@ class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognize
     var swiftris: Swiftris!
     
     @IBOutlet weak var scoreLabel: UILabel!
-    
+    @IBOutlet weak var levelLabel: UILabel!
     //  keep track of the last point on the screen at which a shape movement occurred or where a pan begins
     var panPointReference: CGPoint?
     
@@ -67,6 +67,11 @@ class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognize
     }
     
     func gameDidBegin(swiftris: Swiftris) {
+    //  When the game begins, we reset the score and level labels as well as the speed at which the ticks occur, beginning with TickLengthLevelOne
+        levelLabel.text = "\(swiftris.level)"
+        scoreLabel.text = "\(swiftris.score)"
+        scene.tickLengthMillis = TickLengthLevelOne
+        
         // The following is false when restarting a new game
         if swiftris.nextShape != nil &&
             swiftris.nextShape!.blocks[0].sprite == nil {
@@ -81,10 +86,23 @@ class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognize
     func gameDidEnd(swiftris: Swiftris) {
         view.isUserInteractionEnabled = false
         scene.stopTicking()
+        
+    //  After the game ends, we'll play the designated game over sound. Then we destroy the remaining blocks on screen before starting a brand new game with no delay.
+        scene.playSound(sound: "Sounds/gameover.mp3")
+        scene.animateCollapsingLines(linesToRemove: swiftris.removeAllBlocks(), fallenBlocks: swiftris.removeAllBlocks()) {
+            swiftris.beginGame()
+        }
     }
     
     func gameDidLevelUp(swiftris: Swiftris) {
-        
+    //  Each time the player levels up, we'll decrease the tick interval. At first, each level will decrease it by 100 milliseconds, but as it progresses it will go even faster, and topping off at 50 milliseconds between ticks. Lastly, we play a congratulatory level up sound.
+        levelLabel.text = "\(swiftris.level)"
+        if scene.tickLengthMillis >= 100 {
+            scene.tickLengthMillis -= 100
+        } else if scene.tickLengthMillis > 50 {
+            scene.tickLengthMillis -= 50
+        }
+        scene.playSound(sound: "Sounds/levelup.mp3")
     }
     
     func gameShapeDidDrop(swiftris: Swiftris) {
@@ -94,11 +112,27 @@ class GameViewController: UIViewController, SwiftrisDelegate, UIGestureRecognize
         scene.redrawShape(shape: swiftris.fallingShape!) {
             swiftris.letShapeFall()
         }
+        scene.playSound(sound: "Sounds/drop.mp3")
     }
     
     func gameShapeDidLand(swiftris: Swiftris) {
         scene.stopTicking()
-        nextShape()
+        self.view.isUserInteractionEnabled = false
+        
+    //  When a shape lands either naturally on its own or after a drop, it's time to check for completed lines. We invoke removeCompletedLines to recover the two arrays from Swiftris. If Swiftris removed any lines, we update the score label to represent the newest score and then animate the blocks with our explosive new animation function.
+        let removedLines = swiftris.removeCompletedLines()
+        if removedLines.linesRemoved.count > 0 {
+            self.scoreLabel.text = "\(swiftris.score)"
+            scene.animateCollapsingLines(linesToRemove: removedLines.linesRemoved, fallenBlocks: removedLines.fallenBlocks) {
+                
+            //  After the animation completes, we perform a recursive call. A recursive function is one which invokes itself. In Swiftris' case, after the blocks have fallen to their new location, they may have formed brand new lines.
+            //  After we remove the first set of lines, we invoke gameShapeDidLand(Swiftris) again to detect any new lines. If we find none, we bring in the next shape.
+                self.gameShapeDidLand(swiftris: swiftris)
+            }
+            scene.playSound(sound: "Sounds/bomb.mp3")
+        } else {
+            nextShape()
+        }
     }
     
 //  gestureRecognizer will invoke this function when it recognizes a tap.

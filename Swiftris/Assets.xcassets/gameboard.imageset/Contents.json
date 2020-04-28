@@ -1,12 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal"
-    },
-    {
       "idiom" : "universal",
       "filename" : "gameboard.png",
-      "compression-type" : "gpu-optimized-best",
       "scale" : "1x"
     },
     {
