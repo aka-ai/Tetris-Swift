@@ -48,7 +48,9 @@ class GameScene: SKScene {
         
         let gameBoardTexture = SKTexture(imageNamed: "gameboard")
         let gameBoard = SKSpriteNode(texture: gameBoardTexture, size: CGSize(width: (BlockSize) * CGFloat(NumColumns), height: (BlockSize) * CGFloat(NumRows)))
-        gameBoard.anchorPoint = CGPoint(x:0, y:1.1)
+        
+        //Ai changed gameBoard.anchorPoint
+        gameBoard.anchorPoint = CGPoint(x:-0.1, y:1.25)
         gameBoard.position = LayerPosition
         
         shapeLayer.position = LayerPosition
@@ -91,9 +93,10 @@ class GameScene: SKScene {
     }
     
     //#we've written GameScene's most important function, pointForColumn∫. This function returns the precise coordinate on the screen for where a block sprite belongs based on its row and column position. The math here looks funky but know that we anchor each sprite at its center, so we need to find the center coordinates before placing it in our shapeLayer object.
+    // Ai changed x, y for game position
     func pointForColumn(column: Int, row: Int) -> CGPoint {
-        let x = LayerPosition.x + (CGFloat(column) * BlockSize) + (BlockSize / 2)
-        let y = LayerPosition.y - ((CGFloat(row) * BlockSize) + (BlockSize / 2))
+        let x = LayerPosition.x + (CGFloat(column) * BlockSize) + (BlockSize * 1.5)
+        let y = LayerPosition.y - ((CGFloat(row) * BlockSize) + (BlockSize * 5.5))
         return CGPoint(x: x, y: y)
     }
     
