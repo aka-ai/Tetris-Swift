@@ -9,7 +9,7 @@
 import SpriteKit
 
 //#we define the point size of each block sprite, in our case 20.0 x 20.0, the lower of the available resolution options for each block image. We also declare a layer position which will give us an offset from the edge of the screen.
-let BlockSize:CGFloat = 20.0
+let BlockSize:CGFloat = 39.0
 
 //First, we define a new constant at #1, TickLengthLevelOne. This variable will represent the slowest speed at which our shapes will travel. We've set it to 600 milliseconds, which means that every 6/10ths of a second, our shape should descend by one row.
 let TickLengthLevelOne = TimeInterval(600) //NSTimeInterval' has been renamed to 'TimeInterval'
@@ -47,7 +47,7 @@ class GameScene: SKScene {
         addChild(gameLayer)
         
         let gameBoardTexture = SKTexture(imageNamed: "gameboard")
-        let gameBoard = SKSpriteNode(texture: gameBoardTexture, size: CGSize(width: BlockSize * CGFloat(NumColumns), height: BlockSize * CGFloat(NumRows)))
+        let gameBoard = SKSpriteNode(texture: gameBoardTexture, size: CGSize(width: (BlockSize) * CGFloat(NumColumns), height: (BlockSize) * CGFloat(NumRows)))
         gameBoard.anchorPoint = CGPoint(x:0, y:1.0)
         gameBoard.position = LayerPosition
         

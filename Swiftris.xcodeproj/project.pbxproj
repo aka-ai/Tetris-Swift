@@ -16,7 +16,6 @@
 		15B8BA4F245116B3006200A3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15B8BA4D245116B3006200A3 /* LaunchScreen.storyboard */; };
 		15B8BA5A245116B3006200A3 /* SwiftrisTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B8BA59245116B3006200A3 /* SwiftrisTests.swift */; };
 		15B8BA65245119A2006200A3 /* Sounds in Resources */ = {isa = PBXBuildFile; fileRef = 15B8BA64245119A2006200A3 /* Sounds */; };
-		15B8BA67245119D7006200A3 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 15B8BA66245119D7006200A3 /* Sprites.atlas */; };
 		15B8BA69245145E6006200A3 /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B8BA68245145E6006200A3 /* Array2D.swift */; };
 		15B8BA6B245150B8006200A3 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B8BA6A245150B8006200A3 /* Block.swift */; };
 		15B8BA6D24523469006200A3 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B8BA6C24523469006200A3 /* Shape.swift */; };
@@ -28,6 +27,7 @@
 		15B8BA7924525C0A006200A3 /* SShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B8BA7824525C09006200A3 /* SShape.swift */; };
 		15B8BA7B24525D7A006200A3 /* ZShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B8BA7A24525D7A006200A3 /* ZShape.swift */; };
 		15B8BA7D24526317006200A3 /* Swiftris.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B8BA7C24526317006200A3 /* Swiftris.swift */; };
+		15B8BAB12458D48D006200A3 /* Sprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 15B8BAB02458D48D006200A3 /* Sprites.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +54,6 @@
 		15B8BA59245116B3006200A3 /* SwiftrisTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftrisTests.swift; sourceTree = "<group>"; };
 		15B8BA5B245116B3006200A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15B8BA64245119A2006200A3 /* Sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sounds; sourceTree = "<group>"; };
-		15B8BA66245119D7006200A3 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 		15B8BA68245145E6006200A3 /* Array2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		15B8BA6A245150B8006200A3 /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		15B8BA6C24523469006200A3 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
@@ -66,6 +65,7 @@
 		15B8BA7824525C09006200A3 /* SShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SShape.swift; sourceTree = "<group>"; };
 		15B8BA7A24525D7A006200A3 /* ZShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZShape.swift; sourceTree = "<group>"; };
 		15B8BA7C24526317006200A3 /* Swiftris.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swiftris.swift; sourceTree = "<group>"; };
+		15B8BAB02458D48D006200A3 /* Sprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Sprites.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,12 +107,12 @@
 		15B8BA3D245116B2006200A3 /* Swiftris */ = {
 			isa = PBXGroup;
 			children = (
+				15B8BAB02458D48D006200A3 /* Sprites.atlas */,
 				15B8BA3E245116B2006200A3 /* AppDelegate.swift */,
 				15B8BA42245116B2006200A3 /* Actions.sks */,
 				15B8BA44245116B2006200A3 /* GameScene.swift */,
 				15B8BA46245116B2006200A3 /* GameViewController.swift */,
 				15B8BA48245116B2006200A3 /* Main.storyboard */,
-				15B8BA66245119D7006200A3 /* Sprites.atlas */,
 				15B8BA64245119A2006200A3 /* Sounds */,
 				15B8BA4B245116B3006200A3 /* Assets.xcassets */,
 				15B8BA4D245116B3006200A3 /* LaunchScreen.storyboard */,
@@ -222,7 +222,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15B8BA67245119D7006200A3 /* Sprites.atlas in Resources */,
+				15B8BAB12458D48D006200A3 /* Sprites.atlas in Resources */,
 				15B8BA65245119A2006200A3 /* Sounds in Resources */,
 				15B8BA4A245116B2006200A3 /* Main.storyboard in Resources */,
 				15B8BA4C245116B3006200A3 /* Assets.xcassets in Resources */,
