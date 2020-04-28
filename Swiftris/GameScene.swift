@@ -48,7 +48,7 @@ class GameScene: SKScene {
         
         let gameBoardTexture = SKTexture(imageNamed: "gameboard")
         let gameBoard = SKSpriteNode(texture: gameBoardTexture, size: CGSize(width: (BlockSize) * CGFloat(NumColumns), height: (BlockSize) * CGFloat(NumRows)))
-        gameBoard.anchorPoint = CGPoint(x:0, y:1.0)
+        gameBoard.anchorPoint = CGPoint(x:0, y:1.1)
         gameBoard.position = LayerPosition
         
         shapeLayer.position = LayerPosition
