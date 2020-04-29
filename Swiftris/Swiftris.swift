@@ -17,7 +17,7 @@ let PreviewColumn = 12
 let PreviewRow = 1
 
 let PointsPerLine = 10
-let LevelThreshold = 500
+let LevelThreshold = 50
 
 protocol SwiftrisDelegate {
     //Invoked when the current round of Swiftris ends
